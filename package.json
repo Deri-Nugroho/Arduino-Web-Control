@@ -1,0 +1,31 @@
+{
+  "name": "arduino-web",
+  "version": "1.0.0",
+  "description": "A Node.js project to control Arduino via Serial Port and display real-time data on a web interface using Socket.IO.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "arduino",
+    "serialport",
+    "socket.io",
+    "real-time",
+    "express"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@serialport/parser-readline": "^13.0.0",
+    "compression": "^1.7.5",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "serialport": "^13.0.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
