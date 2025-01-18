@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Web Real-Time</title>
+</head>
+
+<body>
+    <h1>Web Arduino Control</h1>
+    <p id="data">Menunggu data dari Arduino...</p>
+    
+    <button onclick="sendToArduino('1')">Turn On Red Lamp</button>
+    <button onclick="sendToArduino('2')">Turn On Green Lamp</button>
+    <button onclick="sendToArduino('3')">Turn On Blue Lamp</button>
+    <button onclick="sendToArduino('4')">Turn Off Red Lamp</button>
+    <button onclick="sendToArduino('5')">Turn Off Green Lamp</button>
+    <button onclick="sendToArduino('6')">Turn Off Blue Lamp</button>
+
+
+
+
+    <!-- Menyisipkan script socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        // Inisialisasi koneksi Socket.IO
+        const socket = io();
+
+        // Menerima data dari server dan menampilkannya di elemen HTML
+        socket.on("data", ({ data }) => {
+            const dataElement = document.getElementById("data");
+            dataElement.textContent = "Data dari Arduino: " + data;
+        });
+
+        // Mengirimkan data ke server melalui endpoint API
+        function sendToArduino(data) {
+            fetch("http://localhost:3000/arduinoApi", {
+                method: "POST",
+                body: JSON.stringify({ data }), // Mengirimkan data sebagai JSON
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("Data berhasil dikirim:", data);
+                    } else {
+                        console.error("Gagal mengirim data ke server");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
