@@ -1,4 +1,42 @@
 Resources:
+#SNS
+  MySNSTopic:
+  Type: AWS::SNS::Topic
+  Properties:
+    Subscription:
+      - Endpoint: "add valid email address"
+        Protocol: email
+    TopicName: "SampleTopic"
+
+#S3
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: DOC-EXAMPLE-BUCKET
+      AccessControl: Private
+      NotificationConfiguration:
+        TopicConfigurations:
+          - Topic: 'arn:aws:sns:us-east-1:123456789012:TestTopic'
+            Event: 's3:ReducedRedundancyLostObject'
+  S3BucketReplica:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      ReplicationConfiguration:
+        Role: 'arn:aws:iam::123456789012:role/replication_role'
+        Rules:
+          - Id: MyRule1
+            Status: Enabled
+            Prefix: /
+            Destination:
+              Bucket: 'arn:aws:s3:::my-replication-bucket'
+              StorageClass: STANDARD
+          - Status: Enabled
+            Prefix: /
+            Destination:
+              Bucket: 'arn:aws:s3:::my-replication-bucket'
+
 #DB
   RDSCluster:
     Type: 'AWS::RDS::DBCluster'
@@ -24,3 +62,26 @@ Resources:
       SubnetIds: 
         - subnet-7b5b4112
         - subnet-7b5b4115
+
+  Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  Properties:
+    MinimumLoadBalancerCapacity: 3
+    Name: LB
+    SecurityGroups: 
+      - String
+    SubnetMappings: 
+      - SubnetMapping
+    Subnets: 
+      - String
+
+
+#ASG
+  myASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref myLaunchTemplate
+        Version: !GetAtt myLaunchTemplate.LatestVersionNumber
+      MaxSize: '6'
+      MinSize: '1'
+
