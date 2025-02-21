@@ -1,0 +1,26 @@
+Resources:
+#DB
+  RDSCluster:
+    Type: 'AWS::RDS::DBCluster'
+    Properties:
+      MasterUsername: admin
+      MasterUserPassword: 12345678
+      Engine: aurora-mysql
+      DatabaseName: rental
+  
+  RDSDBInstance:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      Engine: aurora-mysql
+      DBClusterIdentifier:
+        Ref: RDSCluster
+      PubliclyAccessible: 'true'
+      DBInstanceClass: db.t3.medium
+
+  myDBSubnetGroup: 
+    Type: AWS::RDS::DBSubnetGroup
+    Properties: 
+      DBSubnetGroupDescription: Description of subnet group
+      SubnetIds: 
+        - subnet-7b5b4112
+        - subnet-7b5b4115
